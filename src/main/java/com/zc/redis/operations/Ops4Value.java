@@ -1,7 +1,6 @@
 package com.zc.redis.operations;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -17,9 +16,8 @@ import java.util.concurrent.TimeUnit;
  * @date 2019-08-07 / 16:22
  */
 @Component
+@Slf4j
 public class Ops4Value {
-    private static final Logger logger = LoggerFactory.getLogger(Ops4Value.class);
-
     private final RedisTemplate<String, Object> template;
 
     public Ops4Value(RedisTemplate<String, Object> template) {
@@ -40,7 +38,7 @@ public class Ops4Value {
             set(key, value, EXPIRE_TIME);
         } catch (Exception e) {
             // redis pool exception
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -55,10 +53,10 @@ public class Ops4Value {
         try {
             template.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return;
         }
-        logger.info("cached ${} success with timeout {}s.", key, expire);
+        log.info("cached ${} success with timeout {}s.", key, expire);
     }
 
     /**
@@ -104,7 +102,7 @@ public class Ops4Value {
         try {
             value = template.opsForValue().increment(key);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return 0L;
         }
         return value;
@@ -121,7 +119,7 @@ public class Ops4Value {
         try {
             value = template.opsForValue().decrement(key);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return 0L;
         }
         return value;

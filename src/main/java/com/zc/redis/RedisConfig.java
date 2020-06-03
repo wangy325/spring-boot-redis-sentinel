@@ -37,6 +37,8 @@ import java.util.Set;
  */
 @Configuration
 public class RedisConfig {
+
+    /** springboot auto config*/
     private final RedisProperties redisProperties;
 
     public RedisConfig(RedisProperties redisProperties) {
